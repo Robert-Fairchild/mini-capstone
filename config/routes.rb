@@ -1,3 +1,12 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get "/stick" => "products#stick_method"
+  get "/elbow" => "products#elbow_method"
+  get "/shins" => "products#shins_method"
+  get "/shirt" => "products#shirt_method"
+  get "/jock" => "products#jock_method"
+  get "/skates" => "products#skates_method"
+
+
+
+
 end
