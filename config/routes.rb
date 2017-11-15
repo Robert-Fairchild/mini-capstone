@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get "/shirt" => "products#shirt_method"
   get "/jock" => "products#jock_method"
   get "/skates" => "products#skates_method"
+  get "/all" => "products#all_method"
 
 
 

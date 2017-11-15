@@ -30,6 +30,13 @@ class ProductsController < ApplicationController
     render json: product.as_json
   end 
 
+def all_method
+  products = Product.all 
+  render json: products.as_json
+end 
+
+
+
 end 
 
 
