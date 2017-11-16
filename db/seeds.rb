@@ -6,8 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-    # product = Product.new({name: "Baur Supreme 1s Hockey Stick", price: "$230", image: "https://images.purehockey.com/img.aspx?pic_id=109437&pic_type=5"})
-    # product.save 
+    product = Product.new({name: "Baur Supreme 1s Hockey Stick", price: "$230", image: "https://images.purehockey.com/img.aspx?pic_id=109437&pic_type=5"})
+    product.save 
 
     product = Product.new({name: "CCM Tacks 3092 Hockey Elbow Pads Sr", price: "$34.99", image: "http://img.inlinewarehouse.com/watermark/rs.php?path=CT3EP-1.jpg"})
     product.save
