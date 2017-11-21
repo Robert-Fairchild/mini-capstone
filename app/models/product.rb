@@ -1,7 +1,12 @@
 class Product < ApplicationRecord
   
+  def in_stock
+    true
+  end 
+  
+
   def is_discounted
-    if price[1..-1].to_f < 50 # This code is price[1..-1] is to delete the first charachter in my price column(which is the $dollar sign so i can change it to an integer) (Any price less than 50 is discounted)
+    if price < 50 # This code is price[1..-1] is to delete the first charachter in my price column(which is the $dollar sign so i can change it to an integer) (Any price less than 50 is discounted)
       return true
     else
       return false
@@ -9,11 +14,12 @@ class Product < ApplicationRecord
   end 
 
   def tax
-    price[1..-1].to_f * 0.09
+    tax = price * 0.09
+    return tax.round(2)
   end
 
   def total
-    price[1..-1].to_f + tax
+    price + tax
   end
 
   def as_json
@@ -26,6 +32,7 @@ class Product < ApplicationRecord
       is_discounted: is_discounted,
       tax: tax,
       total: total,
+      in_stock: in_stock,
       created_at: created_at,
       updated_at: updated_at
     }
