@@ -1,39 +1,59 @@
+
 require "unirest"
 require "pp"
 
-system "clear"
-puts " Welcome to Robs Hockey Shop"
-puts "[1] See all equipment"
-puts "[2] Create new peice of equipment"
-puts "[3] Pick peice of equipment you would like to see"
+puts "Choose an option:"
+puts "[1] Show all products"
+puts "[2] Create a product"
+puts "[3] Show one product"
+puts "[4] Update a product"
+puts "[5] Delete a product"
 
 input_option = gets.chomp
-
 if input_option == "1"
   response = Unirest.get("http://localhost:3000/v1/products")
   products = response.body
-  pp products 
-elsif input_option == "2" 
+  pp products
+elsif input_option == "2"
   params = {}
-  print "Enter equipment name:"
-  params["input_name"] = gets.chomp
-  print "Enter Price:"
-  params["input_price"] = gets.chomp
-  print "Enter image:"
-  params["input_image"] = gets.chomp 
+  print "New product name: "
+  params[:name] = gets.chomp
+  print "New product price: "
+  params[:price] = gets.chomp
+  print "New product image: "
+  params[:image] = gets.chomp
+  print "New product description: "
+  params[:description] = gets.chomp
   response = Unirest.post("http://localhost:3000/v1/products", parameters: params)
   product = response.body
-  if product["errors"]
-    puts "No good!"
-    p product["errors"]
-  else 
-    puts "All good!"
-    pp product 
-  end
-elsif input_option == "3" 
-  print "Which peice of equipment would you like to see?"
-  recipe_id = gets.chomp
-  response = Unirest.get("/products/:id")
-end 
-
-
+  pp product
+elsif input_option == "3"
+  print "Enter a product id: "
+  product_id = gets.chomp
+  response = Unirest.get("http://localhost:3000/v1/products/#{product_id}")
+  product = response.body
+  pp product
+elsif input_option == "4"
+  print "Enter a product id: "
+  product_id = gets.chomp
+  response = Unirest.get("http://localhost:3000/v1/products/#{product_id}")
+  product = response.body
+  params = {}
+  print "Updated product name (#{product["name"]}): "
+  params[:name] = gets.chomp
+  print "Updated product price (#{product["price"]}): "
+  params[:price] = gets.chomp
+  print "Updated product image (#{product["image"]}): "
+  params[:image] = gets.chomp
+  print "Updated product description (#{product["description"]}): "
+  params[:description] = gets.chomp
+  params.delete_if { |_key, value| value.empty? }
+  response = Unirest.patch("http://localhost:3000/v1/products/#{product_id}", parameters: params)
+  product = response.body
+  pp response.body
+elsif input_option == "5"
+  print "Enter a product id: "
+  product_id = gets.chomp
+  response = Unirest.delete("http://localhost:3000/v1/products/#{product_id}")
+  pp response.body
+end

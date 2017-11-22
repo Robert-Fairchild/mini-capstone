@@ -1,3 +1,4 @@
+
 class V1::ProductsController < ApplicationController
   def index
     products = Product.all
@@ -5,45 +6,37 @@ class V1::ProductsController < ApplicationController
   end
 
   def create
-    product = Product.new(name: params["input_name"], price: params["input_price"], image: params["input_image"])
-    
+    product = Product.new(
+      name: params[:name],
+      price: params[:price],
+      image: params[:image],
+      description: params[:description]
+    )
     if product.save
-      render json: product.as_json 
-    else 
+      render json: product.as_json
+    else
       render json: {errors: product.errors.full_messages}, status: :bad_request
-    end 
+    end
   end
 
   def show
-    product_id = params["id"]
-    product = Product.find_by(id:product_id)
+    product = Product.find_by(id: params[:id])
     render json: product.as_json
-  end 
+  end
 
   def update
-    product_id = params["id"]
-    product = Product.find_by(id: product_id)
-    product.name = params ["input_name"]
-    product.price = params ["input_price"]
-    product.image = params ["input_image"]
-    
-    if product.save
-      render json: product.as_json
-    else 
-      render json: {errors: product.errors.full_messages}, status: :bad_request
-    end
-  end 
-
+    product = Product.find_by(id: params[:id])
+    product.name = params[:name] || product.name
+    product.price = params[:price] || product.price
+    product.image = params[:image] || product.image
+    product.description = params[:description] || product.description
+    product.save
+    render json: product.as_json
+  end
 
   def destroy
-    product_id = params["id"]
-    product = Product.find_by(id:product_id)
+    product = Product.find_by(id: params[:id])
     product.destroy
+    render json: {message: "Product successfully destroyed!"}
   end
-end 
-
-
-
-
-
-
+end
