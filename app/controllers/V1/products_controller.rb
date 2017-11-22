@@ -5,9 +5,13 @@ class V1::ProductsController < ApplicationController
   end
 
   def create
-    product = Product.new(title: params["input_name"], price: params["input_price"], image: params["input_image"])
-    product.save
-    render json: product.as_json 
+    product = Product.new(name: params["input_name"], price: params["input_price"], image: params["input_image"])
+    
+    if product.save
+      render json: product.as_json 
+    else 
+      render json: {errors: product.errors.full_messages}, status: :bad_request
+    end 
   end
 
   def show
@@ -22,9 +26,14 @@ class V1::ProductsController < ApplicationController
     product.name = params ["input_name"]
     product.price = params ["input_price"]
     product.image = params ["input_image"]
-    product.save
-    render json: product.as_json
+    
+    if product.save
+      render json: product.as_json
+    else 
+      render json: {errors: product.errors.full_messages}, status: :bad_request
+    end
   end 
+
 
   def destroy
     product_id = params["id"]
