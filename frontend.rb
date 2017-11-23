@@ -4,6 +4,7 @@ require "pp"
 
 puts "Choose an option:"
 puts "[1] Show all products"
+puts    "[1.1] Search products by name"
 puts "[2] Create a product"
 puts "[3] Show one product"
 puts "[4] Update a product"
@@ -12,6 +13,13 @@ puts "[5] Delete a product"
 input_option = gets.chomp
 if input_option == "1"
   response = Unirest.get("http://localhost:3000/v1/products")
+  products = response.body
+  pp products
+elsif input_option == "1.1"
+  print "Enter search terms:"
+  search_terms = gets.chomp
+  puts "Here are the matching products:"
+  response = Unirest.get("http://localhost:3000/v1/products?search=#{search_terms}")
   products = response.body
   pp products
 elsif input_option == "2"
