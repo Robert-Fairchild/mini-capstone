@@ -3,6 +3,19 @@ class Product < ApplicationRecord
   validates :name, presence: true
   validates :price, numericality: {greater_than_or_equal_to: 0}
 
+   belongs_to :supplier
+  # def supplier
+  #   Supplier.find_by(id: self.supplier_id)
+  # end
+
+  has_many :images
+  # def images
+  #   Image.where(product_id: self.id)
+  # end
+
+
+
+
   def in_stock
     true
   end 
@@ -36,6 +49,7 @@ class Product < ApplicationRecord
       tax: tax,
       total: total,
       in_stock: in_stock,
+      supplier: supplier.as_json,
       created_at: created_at,
       updated_at: updated_at
     }
