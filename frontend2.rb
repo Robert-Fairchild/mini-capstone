@@ -41,6 +41,8 @@ while true
     params[:name] = gets.chomp
     print "New product price: "
     params[:price] = gets.chomp
+    print "New product image: "
+    params[:image] = gets.chomp
     print "New product description: "
     params[:description] = gets.chomp
     response = Unirest.post("http://localhost:3000/v1/products", parameters: params)

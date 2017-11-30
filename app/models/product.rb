@@ -3,7 +3,7 @@ class Product < ApplicationRecord
   validates :name, presence: true
   validates :price, numericality: {greater_than_or_equal_to: 0}
 
-   belongs_to :supplier
+  belongs_to :supplier
   # def supplier
   #   Supplier.find_by(id: self.supplier_id)
   # end
@@ -11,7 +11,8 @@ class Product < ApplicationRecord
   has_many :images
   # def images
   #   Image.where(product_id: self.id)
-  # end
+  # 
+  has_many :orders
 
 
 
@@ -42,7 +43,7 @@ class Product < ApplicationRecord
     {
       id: id,
       name: name,
-      image: image,
+      
       description: description,
       price: price,
       is_discounted: is_discounted,

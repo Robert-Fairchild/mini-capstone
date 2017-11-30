@@ -1,24 +1,38 @@
 
 class V1::ProductsController < ApplicationController
+  before_action :authenticate_admin
+
   def index
     products = Product.all.order(:id => :asc)
-    if params[:search]
-      products = products.where("name ILIKE ?", "%#{params[:search]}%")
+
+    user_search_terms = params[:search]
+    if user_search_terms
+      products = products.where("name ILIKE ?", "%" + user_search_terms + "%")
     end
+
+    should_i_sort_by_price = params[:sort_by_price]
+    if should_i_sort_by_price
+      products = Product.all.order(:price => :asc)
+    end
+
     render json: products.as_json
   end
 
   def create
-    product = Product.new(
-      name: params[:name],
-      price: params[:price],
-      image: params[:image],
-      description: params[:description]
-    )
-    if product.save
-      render json: product.as_json
+    if current_user && current_user.admin
+      product = Product.new(
+        name: params[:name],
+        price: params[:price],
+        description: params[:description],
+        supplier_id: 1
+      )
+      if product.save
+        render json: product.as_json
+      else
+        render json: {errors: product.errors.full_messages}, status: :bad_request
+      end
     else
-      render json: {errors: product.errors.full_messages}, status: :bad_request
+      render json: {errors: "Not authorized!"}, status: :unauthorized
     end
   end
 
