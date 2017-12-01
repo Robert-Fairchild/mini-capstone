@@ -38,14 +38,10 @@ while true
     pp products
    elsif input_option == "1.3"
      print "Choose a category: "
-     x = gets.chomp
-     response = Unirest.get("http://localhost:3000/v1/products?input_category_id=#{x}")
+     input_search_terms = gets.chomp
+     response = Unirest.get("http://localhost:3000/v1/products?category_search=#{input_search_terms}")
      products = response.body
      pp products
-
-
-
-
   elsif input_option == "2"
     params = {}
     print "New product name: "

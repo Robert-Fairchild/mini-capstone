@@ -1,6 +1,6 @@
 
 class V1::ProductsController < ApplicationController
-  # before_action :authenticate_admin
+  before_action :authenticate_admin, except: [:index, :show]
 
   def index
     products = Product.all.order(:id => :asc)
@@ -15,7 +15,7 @@ class V1::ProductsController < ApplicationController
       products = Product.all.order(:price => :asc)
     end
 
-    category_id = params[:input_category_id]
+    category_id = params[:category_search]
     if category_id 
       category = Category.find_by(id: category_id)
       products = category.products

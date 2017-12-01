@@ -17,10 +17,10 @@ class V1::OrdersController < ApplicationController
       tax: calculated_tax,
       total: calculated_total
     )
-    order.save
-    render json: order.as_json
-    # else
-    #   render json: {errors: order.errors.full_messages}, status: :bad_request
-    # end
+    if order.save
+      render json: order.as_json
+     else
+       render json: {errors: order.errors.full_messages}, status: :bad_request
+    end
   end
 end
