@@ -16,3 +16,17 @@
 
     product = Product.new({name: "CCM Jetspeed FT1 Ice Hockey Skates Sr", price: "899.99", image: "http://img.inlinewarehouse.com/watermark/rs.php?path=CFT1S-1.jpg"})
     product.save
+
+    supplier = Supplier.new({name: "CCM", email: "ccm@ccm.com", phone_number: "5425561345"})
+
+    category = Category.new({name: "Skates"})
+    category.save
+
+    category = Category.new({name: "Pads"})
+    category.save
+
+    category = Category.new({name: "Shoulder Pads"})
+    category.save
+    category_product = CategoryProduct.new({product_id: 2, category_id:2})
+    category_product.save
+

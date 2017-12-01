@@ -13,7 +13,8 @@ class Product < ApplicationRecord
   #   Image.where(product_id: self.id)
   # 
   has_many :orders
-
+  has_many :category_products
+  has_many :categories, through: :category_products
 
 
 
@@ -23,7 +24,7 @@ class Product < ApplicationRecord
   
 
   def is_discounted
-    if price < 50 # This code is price[1..-1] is to delete the first charachter in my price column(which is the $dollar sign so i can change it to an integer) (Any price less than 50 is discounted)
+    if price < 50 
       return true
     else
       return false
