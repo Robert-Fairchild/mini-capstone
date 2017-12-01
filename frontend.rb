@@ -7,6 +7,7 @@ while true
   puts "[1] Show all products"
   puts "  [1.1] Show all products that match search terms"
   puts "  [1.2] Show all products sorted by price"
+  puts "  [1.3] Search products by category"
   puts "[2] Create a product"
   puts "[3] Show one product"
   puts "[4] Update a product"
@@ -35,6 +36,16 @@ while true
     response = Unirest.get("http://localhost:3000/v1/products?sort_by_price=true")
     products = response.body
     pp products
+   elsif input_option == "1.3"
+     print "Choose a category: "
+     x = gets.chomp
+     response = Unirest.get("http://localhost:3000/v1/products?input_category_id=#{x}")
+     products = response.body
+     pp products
+
+
+
+
   elsif input_option == "2"
     params = {}
     print "New product name: "

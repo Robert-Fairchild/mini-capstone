@@ -53,7 +53,8 @@ class Product < ApplicationRecord
       in_stock: in_stock,
       supplier: supplier.as_json,
       created_at: created_at,
-      updated_at: updated_at
+      updated_at: updated_at,
+      categories: categories.as_json
     }
   end 
 
