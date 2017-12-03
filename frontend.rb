@@ -14,6 +14,7 @@ while true
   puts "[5] Delete a product"
   puts "[6] Order a product"
   puts "[7] View all orders"
+  puts "[8] Add Item to Cart"
   puts
   puts "[signup] Sign up (create a user)"
   puts "[login] Log in (create a jwt)"
@@ -126,6 +127,20 @@ while true
       }
     )
     pp response.body
+  elsif input_option == "8"
+    print "Enter product id"
+    params[:product_id] = gets.chomp
+    print "Enter quantity"
+    params[:quantity] = gets.chomp
+    response = Unirest.post("http://localhost:3000/v1/carted_products", parameters: params)
+    carted_product = response.body
+    if carted_products["errors"]
+      puts "No good!"
+      p carted_products["errors"]
+    else
+      puts "All good!"
+      pp carted_products
+    end
   elsif input_option == "login"
     print "Enter email: "
     input_email = gets.chomp

@@ -2,19 +2,14 @@ class Product < ApplicationRecord
   
   validates :name, presence: true
   validates :price, numericality: {greater_than_or_equal_to: 0}
-
   belongs_to :supplier
-  # def supplier
-  #   Supplier.find_by(id: self.supplier_id)
-  # end
-
   has_many :images
-  # def images
-  #   Image.where(product_id: self.id)
-  # 
-  has_many :orders
+  
+  has_many :carted_products
+  has_many :orders, through: :carted_products
   has_many :category_products
   has_many :categories, through: :category_products
+  
 
 
 
