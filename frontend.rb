@@ -1,3 +1,4 @@
+
 require "unirest"
 require "pp"
 
@@ -7,15 +8,13 @@ while true
   puts "[1] Show all products"
   puts "  [1.1] Show all products that match search terms"
   puts "  [1.2] Show all products sorted by price"
-  puts "  [1.3] Search products by category"
   puts "[2] Create a product"
   puts "[3] Show one product"
   puts "[4] Update a product"
   puts "[5] Delete a product"
-  puts "[6] Order a product"
-  puts "[7] View all orders"
-  puts "[8] Add Item to Cart"
-  puts "[9] View your cart"
+  puts
+  puts "[6] Add a product to the shopping cart"
+  puts "[7] View shopping cart"
   puts
   puts "[signup] Sign up (create a user)"
   puts "[login] Log in (create a jwt)"
@@ -38,18 +37,14 @@ while true
     response = Unirest.get("http://localhost:3000/v1/products?sort_by_price=true")
     products = response.body
     pp products
-   elsif input_option == "1.3"
-     print "Choose a category: "
-     input_search_terms = gets.chomp
-     response = Unirest.get("http://localhost:3000/v1/products?category_search=#{input_search_terms}")
-     products = response.body
-     pp products
   elsif input_option == "2"
     params = {}
     print "New product name: "
     params[:name] = gets.chomp
     print "New product price: "
     params[:price] = gets.chomp
+    print "New product image: "
+    params[:image] = gets.chomp
     print "New product description: "
     params[:description] = gets.chomp
     response = Unirest.post("http://localhost:3000/v1/products", parameters: params)
@@ -96,19 +91,31 @@ while true
     params[:input_product_id] = gets.chomp
     print "Quantity: "
     params[:input_quantity] = gets.chomp
-    response = Unirest.post("http://localhost:3000/v1/orders", parameters: params)
-    order = response.body
-    if order["errors"]
+    response = Unirest.post("http://localhost:3000/v1/carted_products", parameters: params)
+    carted_product = response.body
+    if carted_product["errors"]
       puts "No good!"
-      p order["errors"]
+      p carted_product["errors"]
     else
       puts "All good!"
-      pp order
+      pp carted_product
     end
   elsif input_option == "7"
-    response = Unirest.get("http://localhost:3000/v1/orders")
-    orders = response.body
-    pp orders
+    response = Unirest.get("http://localhost:3000/v1/carted_products")
+    carted_products = response.body
+    pp carted_products
+    puts "Press 'o' to order the items, or 'r' to remove a carted product, or enter to continue"
+    input_sub_option = gets.chomp
+    if input_sub_option == 'o'
+      response = Unirest.post("http://localhost:3000/v1/orders")
+      order = response.body
+      pp order
+    elsif input_sub_option == 'r'
+      print "Enter the id of the carted product to remove: "
+      id = gets.chomp
+      response = Unirest.delete("http://localhost:3000/v1/carted_products/#{id}")
+      pp response.body
+    end
   elsif input_option == "signup"
     print "Enter name: "
     input_name = gets.chomp
@@ -128,34 +135,6 @@ while true
       }
     )
     pp response.body
-  elsif input_option == "8"
-    params = {}
-    print "Enter product id:"
-    params[:product_id] = gets.chomp
-    print "Enter quantity:"
-    params[:quantity] = gets.chomp
-    response = Unirest.post("http://localhost:3000/v1/carted_products", parameters: params)
-    carted_product = response.body
-    if carted_product["errors"]
-      puts "No good!"
-      p carted_product["errors"]
-    else
-      puts "All good!"
-      pp carted_product
-    end
-  elsif input_option == "9"
-    response = Unirest.get("http://localhost:3000/v1/carted_products")
-    carted_products = response.body
-    pp carted_products
-
-
-
-
-
-
-
-
-
   elsif input_option == "login"
     print "Enter email: "
     input_email = gets.chomp
