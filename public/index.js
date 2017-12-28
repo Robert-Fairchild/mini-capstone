@@ -1,19 +1,67 @@
-/* global axios */
+/* global Vue, VueRouter, axios */
 
-axios.get("http://localhost:3000/v1/products").then(function(response) {
-  var products = response.data;
-  console.log(products);
+var HomePage = {
+  template: "#home-page",
+  data: function() {
+    return {
+      message: "Welcome to Vue.js!",
+      products: []
+    };
+  },
+  mounted: function() {
+    axios.get("/v1/products").then(
+      function(response) {
+        this.products = response.data;
+      }.bind(this)
+    );
+  },
+  methods: {},
+  computed: {}
+};
 
-  var productTemplate = document.querySelector("#product-card");
-  var productContainer = document.querySelector(".row");
+var productsShowPage = {
+  template: "#products-show-page",
+  data: function() {
+    return {
+      product: {
+        name: "Sample name",
+        description: ["Sample description"],
+        price: ["Sample price"]
+      }
+    };
+  },
+  created: function() {
+    axios.get("/v1/products/" + this.$route.params.id).then(
+      function(response) {
+        this.product = response.data;
+      }.bind(this)
+    );
+  },
+  methods: {},
+  computed: {}
+};
 
-  products.forEach(function(product) {
-    var clone = productTemplate.content.cloneNode(true);
+var SamplePage = {
+  template: "#sample-page",
+  data: function() {
+    return {
+      message: "Welcome to a sample page!"
+    };
+  },
+  created: function() {},
+  methods: {},
+  computed: {}
+};
 
-    clone.querySelector(".card-img-top").src = product.image;
-    clone.querySelector(".card-title").innerText = product.name;
-    clone.querySelector(".card-text").innerText = product.description;
+var router = new VueRouter({
+  routes: [
+    { path: "/", component: HomePage },
+    { path: "/v1/products/:id", component: productsShowPage },
+    { path: "/sample", component: SamplePage }
+  ]
+});
 
-    productContainer.appendChild(clone);
-  });
+var app = new Vue({
+  el: "#app",
+  router: router
 });
